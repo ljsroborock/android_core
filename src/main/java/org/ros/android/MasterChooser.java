@@ -16,8 +16,6 @@
 
 package org.ros.android;
 
-import com.google.common.base.Preconditions;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,18 +25,22 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.common.base.Preconditions;
+
 import org.ros.android.android_core_components.R;
 import org.ros.exception.RosRuntimeException;
 import org.ros.internal.node.client.MasterClient;
