@@ -391,8 +391,8 @@ public class PanTiltView extends RelativeLayout implements OnTouchListener, Node
   }
 
   private void initPanTiltWidget() {
-    mainLayout = (RelativeLayout) findViewById(R.id.pan_tilt_layout);
-    desiredTack = (ImageView) findViewById(R.id.pt_divet);
+    mainLayout = findViewById(R.id.pan_tilt_layout);
+    desiredTack = findViewById(R.id.pt_divet);
     topLargeTack = new ImageView[10];
     topSmallTack = new ImageView[10];
     rightLargeTack = new ImageView[7];
@@ -401,26 +401,26 @@ public class PanTiltView extends RelativeLayout implements OnTouchListener, Node
       topLargeTack[i] = new ImageView(getContext());
       topSmallTack[i] = new ImageView(getContext());
     }
-    topLargeTack[0] = (ImageView) findViewById(R.id.pan_large_marker_0);
-    topLargeTack[1] = (ImageView) findViewById(R.id.pan_large_marker_1);
-    topLargeTack[2] = (ImageView) findViewById(R.id.pan_large_marker_2);
-    topLargeTack[3] = (ImageView) findViewById(R.id.pan_large_marker_3);
-    topLargeTack[4] = (ImageView) findViewById(R.id.pan_large_marker_4);
-    topLargeTack[5] = (ImageView) findViewById(R.id.pan_large_marker_5);
-    topLargeTack[6] = (ImageView) findViewById(R.id.pan_large_marker_6);
-    topLargeTack[7] = (ImageView) findViewById(R.id.pan_large_marker_7);
-    topLargeTack[8] = (ImageView) findViewById(R.id.pan_large_marker_8);
-    topLargeTack[9] = (ImageView) findViewById(R.id.pan_large_marker_9);
-    topSmallTack[0] = (ImageView) findViewById(R.id.pan_small_marker_0);
-    topSmallTack[1] = (ImageView) findViewById(R.id.pan_small_marker_1);
-    topSmallTack[2] = (ImageView) findViewById(R.id.pan_small_marker_2);
-    topSmallTack[3] = (ImageView) findViewById(R.id.pan_small_marker_3);
-    topSmallTack[4] = (ImageView) findViewById(R.id.pan_small_marker_4);
-    topSmallTack[5] = (ImageView) findViewById(R.id.pan_small_marker_5);
-    topSmallTack[6] = (ImageView) findViewById(R.id.pan_small_marker_6);
-    topSmallTack[7] = (ImageView) findViewById(R.id.pan_small_marker_7);
-    topSmallTack[8] = (ImageView) findViewById(R.id.pan_small_marker_8);
-    topSmallTack[9] = (ImageView) findViewById(R.id.pan_small_marker_9);
+    topLargeTack[0] = findViewById(R.id.pan_large_marker_0);
+    topLargeTack[1] = findViewById(R.id.pan_large_marker_1);
+    topLargeTack[2] = findViewById(R.id.pan_large_marker_2);
+    topLargeTack[3] = findViewById(R.id.pan_large_marker_3);
+    topLargeTack[4] = findViewById(R.id.pan_large_marker_4);
+    topLargeTack[5] = findViewById(R.id.pan_large_marker_5);
+    topLargeTack[6] = findViewById(R.id.pan_large_marker_6);
+    topLargeTack[7] = findViewById(R.id.pan_large_marker_7);
+    topLargeTack[8] = findViewById(R.id.pan_large_marker_8);
+    topLargeTack[9] = findViewById(R.id.pan_large_marker_9);
+    topSmallTack[0] = findViewById(R.id.pan_small_marker_0);
+    topSmallTack[1] = findViewById(R.id.pan_small_marker_1);
+    topSmallTack[2] = findViewById(R.id.pan_small_marker_2);
+    topSmallTack[3] = findViewById(R.id.pan_small_marker_3);
+    topSmallTack[4] = findViewById(R.id.pan_small_marker_4);
+    topSmallTack[5] = findViewById(R.id.pan_small_marker_5);
+    topSmallTack[6] = findViewById(R.id.pan_small_marker_6);
+    topSmallTack[7] = findViewById(R.id.pan_small_marker_7);
+    topSmallTack[8] = findViewById(R.id.pan_small_marker_8);
+    topSmallTack[9] = findViewById(R.id.pan_small_marker_9);
     for (int i = 0; i < topLargeTack.length; i++) {
       topLargeTack[i].setAlpha(0.0f);
       topSmallTack[i].setAlpha(0.0f);
@@ -429,33 +429,33 @@ public class PanTiltView extends RelativeLayout implements OnTouchListener, Node
       rightLargeTack[i] = new ImageView(getContext());
       rightSmallTack[i] = new ImageView(getContext());
     }
-    rightLargeTack[0] = (ImageView) findViewById(R.id.tilt_large_marker_0);
-    rightLargeTack[1] = (ImageView) findViewById(R.id.tilt_large_marker_1);
-    rightLargeTack[2] = (ImageView) findViewById(R.id.tilt_large_marker_2);
-    rightLargeTack[3] = (ImageView) findViewById(R.id.tilt_large_marker_3);
-    rightLargeTack[4] = (ImageView) findViewById(R.id.tilt_large_marker_4);
-    rightLargeTack[5] = (ImageView) findViewById(R.id.tilt_large_marker_5);
-    rightLargeTack[6] = (ImageView) findViewById(R.id.tilt_large_marker_6);
-    rightSmallTack[0] = (ImageView) findViewById(R.id.tilt_small_marker_0);
-    rightSmallTack[1] = (ImageView) findViewById(R.id.tilt_small_marker_1);
-    rightSmallTack[2] = (ImageView) findViewById(R.id.tilt_small_marker_2);
-    rightSmallTack[3] = (ImageView) findViewById(R.id.tilt_small_marker_3);
-    rightSmallTack[4] = (ImageView) findViewById(R.id.tilt_small_marker_4);
-    rightSmallTack[5] = (ImageView) findViewById(R.id.tilt_small_marker_5);
-    rightSmallTack[6] = (ImageView) findViewById(R.id.tilt_small_marker_6);
+    rightLargeTack[0] = findViewById(R.id.tilt_large_marker_0);
+    rightLargeTack[1] = findViewById(R.id.tilt_large_marker_1);
+    rightLargeTack[2] = findViewById(R.id.tilt_large_marker_2);
+    rightLargeTack[3] = findViewById(R.id.tilt_large_marker_3);
+    rightLargeTack[4] = findViewById(R.id.tilt_large_marker_4);
+    rightLargeTack[5] = findViewById(R.id.tilt_large_marker_5);
+    rightLargeTack[6] = findViewById(R.id.tilt_large_marker_6);
+    rightSmallTack[0] = findViewById(R.id.tilt_small_marker_0);
+    rightSmallTack[1] = findViewById(R.id.tilt_small_marker_1);
+    rightSmallTack[2] = findViewById(R.id.tilt_small_marker_2);
+    rightSmallTack[3] = findViewById(R.id.tilt_small_marker_3);
+    rightSmallTack[4] = findViewById(R.id.tilt_small_marker_4);
+    rightSmallTack[5] = findViewById(R.id.tilt_small_marker_5);
+    rightSmallTack[6] = findViewById(R.id.tilt_small_marker_6);
     for (int i = 0; i < rightLargeTack.length; i++) {
       rightLargeTack[i].setAlpha(0.0f);
       rightSmallTack[i].setAlpha(0.0f);
     }
 
     zoomLitBar = new ImageView[5];
-    zoomLitBar[0] = (ImageView) findViewById(R.id.zoom_bar_lit_0);
-    zoomLitBar[1] = (ImageView) findViewById(R.id.zoom_bar_lit_1);
-    zoomLitBar[2] = (ImageView) findViewById(R.id.zoom_bar_lit_2);
-    zoomLitBar[3] = (ImageView) findViewById(R.id.zoom_bar_lit_3);
-    zoomLitBar[4] = (ImageView) findViewById(R.id.zoom_bar_lit_4);
+    zoomLitBar[0] = findViewById(R.id.zoom_bar_lit_0);
+    zoomLitBar[1] = findViewById(R.id.zoom_bar_lit_1);
+    zoomLitBar[2] = findViewById(R.id.zoom_bar_lit_2);
+    zoomLitBar[3] = findViewById(R.id.zoom_bar_lit_3);
+    zoomLitBar[4] = findViewById(R.id.zoom_bar_lit_4);
 
-    homeIcon = (ImageView) findViewById(R.id.pt_home_marker);
+    homeIcon = findViewById(R.id.pt_home_marker);
   }
 
   private void loadSettings() {

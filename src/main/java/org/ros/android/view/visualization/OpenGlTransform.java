@@ -34,14 +34,14 @@ public class OpenGlTransform {
     @Override
     protected FloatBuffer initialValue() {
       return FloatBuffer.allocate(16);
-    };
+    }
 
     @Override
     public FloatBuffer get() {
       FloatBuffer buffer = super.get();
       buffer.clear();
       return buffer;
-    };
+    }
   };
 
   private OpenGlTransform() {

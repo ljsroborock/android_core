@@ -148,9 +148,9 @@ public abstract class RosActivity extends Activity {
       return serviceListener;
     }
 
-  };
+  }
 
-  /**
+    /**
    * Standard constructor.
    * Use this constructor to proceed using the standard {@link MasterChooser}.
    * @param notificationTicker Title to use in Ticker notifications.

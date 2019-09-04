@@ -151,8 +151,8 @@ public class MasterChooser extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.master_chooser);
     final Pattern uriPattern = RosURIPattern.URI;
-    uriText = (AutoCompleteTextView) findViewById(R.id.master_chooser_uri);
-    connectButton = (Button) findViewById(R.id.master_chooser_ok);
+    uriText = findViewById(R.id.master_chooser_uri);
+    connectButton = findViewById(R.id.master_chooser_ok);
     uriText.setThreshold(RosURIPattern.HTTP_PROTOCOL_LENGTH);
 
     ArrayAdapter<String> uriAdapter = new ArrayAdapter<>
@@ -182,7 +182,7 @@ public class MasterChooser extends AppCompatActivity {
       }
     });
 
-    ListView interfacesList = (ListView) findViewById(R.id.networkInterfaces);
+    ListView interfacesList = findViewById(R.id.networkInterfaces);
     final List<String> list = new ArrayList<String>();
 
     try {
@@ -216,7 +216,7 @@ public class MasterChooser extends AppCompatActivity {
             NodeConfiguration.DEFAULT_MASTER_URI.toString());
     uriText.setText(uri);
 
-    connectionLayout = (LinearLayout) findViewById(R.id.connection_layout);
+    connectionLayout = findViewById(R.id.connection_layout);
   }
 
   @Override
@@ -347,7 +347,7 @@ public class MasterChooser extends AppCompatActivity {
 
   public void advancedCheckboxClicked(View view) {
     boolean checked = ((CheckBox) view).isChecked();
-    LinearLayout advancedOptions = (LinearLayout) findViewById(R.id.advancedOptions);
+    LinearLayout advancedOptions = findViewById(R.id.advancedOptions);
     if (checked) {
       advancedOptions.setVisibility(View.VISIBLE);
     } else {
@@ -412,7 +412,7 @@ public class MasterChooser extends AppCompatActivity {
     SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
     editor.putString(PREFS_KEY_NAME, uri);
     for (int i = 0; i < recentURIs.size(); i++) {
-      editor.putString(RECENT_PREFIX_KEY_NAME + String.valueOf(i), recentURIs.get(i));
+      editor.putString(RECENT_PREFIX_KEY_NAME + i, recentURIs.get(i));
     }
 
     editor.putInt(RECENT_COUNT_KEY_NAME, recentURIs.size());
@@ -431,7 +431,7 @@ public class MasterChooser extends AppCompatActivity {
     int numRecent = prefs.getInt(RECENT_COUNT_KEY_NAME, 0);
     recentURIs = new ArrayList<>(numRecent);
     for (int i = 0; i < numRecent; i++) {
-      String uri = prefs.getString(RECENT_PREFIX_KEY_NAME + String.valueOf(i), "");
+      String uri = prefs.getString(RECENT_PREFIX_KEY_NAME + i, "");
       if (!uri.isEmpty()) {
         recentURIs.add(uri);
       }
