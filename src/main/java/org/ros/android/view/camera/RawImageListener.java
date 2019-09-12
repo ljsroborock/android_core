@@ -4,6 +4,6 @@ import android.hardware.Camera.Size;
 
 interface RawImageListener {
 
-  void onNewRawImage(byte[] data, Size size);
+    void onNewRawImage(byte[] data, Size size);
 
 }

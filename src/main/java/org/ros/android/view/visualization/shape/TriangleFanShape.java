@@ -16,10 +16,9 @@
 
 package org.ros.android.view.visualization.shape;
 
-import org.ros.android.view.visualization.VisualizationView;
-
 import org.ros.android.view.visualization.Color;
 import org.ros.android.view.visualization.Vertices;
+import org.ros.android.view.visualization.VisualizationView;
 
 import java.nio.FloatBuffer;
 
@@ -36,22 +35,20 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class TriangleFanShape extends BaseShape {
 
-  private final FloatBuffer vertices;
+    private final FloatBuffer vertices;
 
-  /**
-   * @param vertices
-   *          an array of vertices as defined by OpenGL's GL_TRIANGLE_FAN method
-   * @param color
-   *          the {@link Color} of the {@link Shape}
-   */
-  public TriangleFanShape(float[] vertices, Color color) {
-    super();
-    this.vertices = Vertices.toFloatBuffer(vertices);
-    setColor(color);
-  }
+    /**
+     * @param vertices an array of vertices as defined by OpenGL's GL_TRIANGLE_FAN method
+     * @param color    the {@link Color} of the {@link Shape}
+     */
+    public TriangleFanShape(float[] vertices, Color color) {
+        super();
+        this.vertices = Vertices.toFloatBuffer(vertices);
+        setColor(color);
+    }
 
-  @Override
-  public void drawShape(VisualizationView view, GL10 gl) {
-    Vertices.drawTriangleFan(gl, vertices, getColor());
-  }
+    @Override
+    public void drawShape(VisualizationView view, GL10 gl) {
+        Vertices.drawTriangleFan(gl, vertices, getColor());
+    }
 }

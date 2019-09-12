@@ -31,50 +31,50 @@ import javax.microedition.khronos.opengles.GL10;
  * @author moesenle@google.com (Lorenz Moesenlechner)
  */
 public class PoseSubscriberLayer extends SubscriberLayer<geometry_msgs.PoseStamped> implements
-    TfLayer {
+        TfLayer {
 
-  private final GraphName targetFrame;
+    private final GraphName targetFrame;
 
-  private Shape shape;
-  private boolean ready;
+    private Shape shape;
+    private boolean ready;
 
-  public PoseSubscriberLayer(String topic) {
-    this(GraphName.of(topic));
-  }
-
-  public PoseSubscriberLayer(GraphName topic) {
-    super(topic, geometry_msgs.PoseStamped._TYPE);
-    targetFrame = GraphName.of("map");
-    ready = false;
-  }
-
-  @Override
-  public void draw(VisualizationView view, GL10 gl) {
-    if (ready) {
-      shape.draw(view, gl);
+    public PoseSubscriberLayer(String topic) {
+        this(GraphName.of(topic));
     }
-  }
 
-  @Override
-  public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
-    super.onStart(view, connectedNode);
-    shape = new GoalShape();
-    getSubscriber().addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
-      @Override
-      public void onNewMessage(geometry_msgs.PoseStamped pose) {
-        GraphName source = GraphName.of(pose.getHeader().getFrameId());
-        FrameTransform frameTransform = view.getFrameTransformTree().transform(source, targetFrame);
-        if (frameTransform != null) {
-          Transform poseTransform = Transform.fromPoseMessage(pose.getPose());
-          shape.setTransform(frameTransform.getTransform().multiply(poseTransform));
-          ready = true;
+    public PoseSubscriberLayer(GraphName topic) {
+        super(topic, geometry_msgs.PoseStamped._TYPE);
+        targetFrame = GraphName.of("map");
+        ready = false;
+    }
+
+    @Override
+    public void draw(VisualizationView view, GL10 gl) {
+        if (ready) {
+            shape.draw(view, gl);
         }
-      }
-    });
-  }
+    }
 
-  @Override
-  public GraphName getFrame() {
-    return targetFrame;
-  }
+    @Override
+    public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
+        super.onStart(view, connectedNode);
+        shape = new GoalShape();
+        getSubscriber().addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
+            @Override
+            public void onNewMessage(geometry_msgs.PoseStamped pose) {
+                GraphName source = GraphName.of(pose.getHeader().getFrameId());
+                FrameTransform frameTransform = view.getFrameTransformTree().transform(source, targetFrame);
+                if (frameTransform != null) {
+                    Transform poseTransform = Transform.fromPoseMessage(pose.getPose());
+                    shape.setTransform(frameTransform.getTransform().multiply(poseTransform));
+                    ready = true;
+                }
+            }
+        });
+    }
+
+    @Override
+    public GraphName getFrame() {
+        return targetFrame;
+    }
 }

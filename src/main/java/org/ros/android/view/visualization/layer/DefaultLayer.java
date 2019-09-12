@@ -17,6 +17,7 @@
 package org.ros.android.view.visualization.layer;
 
 import android.view.MotionEvent;
+
 import org.ros.android.view.visualization.VisualizationView;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
@@ -27,37 +28,37 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Base class for visualization layers.
- * 
+ *
  * @author moesenle@google.com (Lorenz Moesenlechner)
  */
 public abstract class DefaultLayer implements Layer {
 
-  @Override
-  public void init(NodeMainExecutor nodeMainExecutor) {
-  }
-  
-  @Override
-  public void draw(VisualizationView view, GL10 gl) {
-  }
+    @Override
+    public void init(NodeMainExecutor nodeMainExecutor) {
+    }
 
-  @Override
-  public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
-    return false;
-  }
+    @Override
+    public void draw(VisualizationView view, GL10 gl) {
+    }
 
-  @Override
-  public void onStart(VisualizationView view, ConnectedNode connectedNode) {
-  }
+    @Override
+    public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
+        return false;
+    }
 
-  @Override
-  public void onShutdown(VisualizationView view, Node node) {
-  }
-  
-  @Override
-  public void onSurfaceChanged(VisualizationView view, GL10 gl, int width, int height) {
-  }
-  
-  @Override
-  public void onSurfaceCreated(VisualizationView view, GL10 gl, EGLConfig config) {
-  }
+    @Override
+    public void onStart(VisualizationView view, ConnectedNode connectedNode) {
+    }
+
+    @Override
+    public void onShutdown(VisualizationView view, Node node) {
+    }
+
+    @Override
+    public void onSurfaceChanged(VisualizationView view, GL10 gl, int width, int height) {
+    }
+
+    @Override
+    public void onSurfaceCreated(VisualizationView view, GL10 gl, EGLConfig config) {
+    }
 }

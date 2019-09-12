@@ -29,32 +29,32 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class RobotLayer extends DefaultLayer implements TfLayer {
 
-  private final GraphName frame;
+    private final GraphName frame;
 
-  private Shape shape;
+    private Shape shape;
 
-  public RobotLayer(GraphName frame) {
-    this.frame = frame;
-  }
-
-  public RobotLayer(String frame) {
-    this(GraphName.of(frame));
-  }
-
-  @Override
-  public void draw(VisualizationView view, GL10 gl) {
-    if (shape != null) {
-      shape.draw(view, gl);
+    public RobotLayer(GraphName frame) {
+        this.frame = frame;
     }
-  }
 
-  @Override
-  public void onStart(VisualizationView view, ConnectedNode connectedNode) {
-    shape = new PixelSpacePoseShape();
-  }
+    public RobotLayer(String frame) {
+        this(GraphName.of(frame));
+    }
 
-  @Override
-  public GraphName getFrame() {
-    return frame;
-  }
+    @Override
+    public void draw(VisualizationView view, GL10 gl) {
+        if (shape != null) {
+            shape.draw(view, gl);
+        }
+    }
+
+    @Override
+    public void onStart(VisualizationView view, ConnectedNode connectedNode) {
+        shape = new PixelSpacePoseShape();
+    }
+
+    @Override
+    public GraphName getFrame() {
+        return frame;
+    }
 }

@@ -29,30 +29,30 @@ import org.ros.node.topic.Subscriber;
  */
 public class SubscriberLayer<T> extends DefaultLayer {
 
-  private final GraphName topicName;
-  private final String messageType;
+    private final GraphName topicName;
+    private final String messageType;
 
-  private Subscriber<T> subscriber;
+    private Subscriber<T> subscriber;
 
-  public SubscriberLayer(GraphName topicName, String messageType) {
-    this.topicName = topicName;
-    this.messageType = messageType;
-  }
+    public SubscriberLayer(GraphName topicName, String messageType) {
+        this.topicName = topicName;
+        this.messageType = messageType;
+    }
 
-  @Override
-  public void onStart(VisualizationView view, ConnectedNode connectedNode) {
-    super.onStart(view, connectedNode);
-    subscriber = connectedNode.newSubscriber(topicName, messageType);
-  }
+    @Override
+    public void onStart(VisualizationView view, ConnectedNode connectedNode) {
+        super.onStart(view, connectedNode);
+        subscriber = connectedNode.newSubscriber(topicName, messageType);
+    }
 
-  @Override
-  public void onShutdown(VisualizationView view, Node node) {
-    subscriber.shutdown();
-    super.onShutdown(view, node);
-  }
+    @Override
+    public void onShutdown(VisualizationView view, Node node) {
+        subscriber.shutdown();
+        super.onShutdown(view, node);
+    }
 
-  public Subscriber<T> getSubscriber() {
-    Preconditions.checkNotNull(subscriber);
-    return subscriber;
-  }
+    public Subscriber<T> getSubscriber() {
+        Preconditions.checkNotNull(subscriber);
+        return subscriber;
+    }
 }

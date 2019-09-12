@@ -17,6 +17,7 @@
 package org.ros.android.view.visualization;
 
 import android.view.MotionEvent;
+
 import org.ros.math.RosMath;
 
 /**
@@ -24,39 +25,39 @@ import org.ros.math.RosMath;
  */
 public class RotateGestureDetector {
 
-  public interface OnRotateGestureListener {
-    boolean onRotate(MotionEvent event1, MotionEvent event2, double deltaAngle);
-  }
-
-  private static final double MAX_DELTA_ANGLE = 1e-1;
-
-  private final OnRotateGestureListener listener;
-
-  private MotionEvent previousMotionEvent;
-
-  public RotateGestureDetector(OnRotateGestureListener listener) {
-    this.listener = listener;
-  }
-
-  private double angle(MotionEvent event) {
-    double deltaX = (event.getX(0) - event.getX(1));
-    double deltaY = (event.getY(0) - event.getY(1));
-    return Math.atan2(deltaY, deltaX);
-  }
-
-  public boolean onTouchEvent(MotionEvent event) {
-    if (event.getPointerCount() != 2) {
-      return false;
+    public interface OnRotateGestureListener {
+        boolean onRotate(MotionEvent event1, MotionEvent event2, double deltaAngle);
     }
-    if (previousMotionEvent == null) {
-      previousMotionEvent = MotionEvent.obtain(event);
-      return false;
+
+    private static final double MAX_DELTA_ANGLE = 1e-1;
+
+    private final OnRotateGestureListener listener;
+
+    private MotionEvent previousMotionEvent;
+
+    public RotateGestureDetector(OnRotateGestureListener listener) {
+        this.listener = listener;
     }
-    double deltaAngle =
-        RosMath.clamp(angle(previousMotionEvent) - angle(event), -MAX_DELTA_ANGLE, MAX_DELTA_ANGLE);
-    boolean result = listener.onRotate(previousMotionEvent, event, deltaAngle);
-    previousMotionEvent.recycle();
-    previousMotionEvent = MotionEvent.obtain(event);
-    return result;
-  }
+
+    private double angle(MotionEvent event) {
+        double deltaX = (event.getX(0) - event.getX(1));
+        double deltaY = (event.getY(0) - event.getY(1));
+        return Math.atan2(deltaY, deltaX);
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() != 2) {
+            return false;
+        }
+        if (previousMotionEvent == null) {
+            previousMotionEvent = MotionEvent.obtain(event);
+            return false;
+        }
+        double deltaAngle =
+                RosMath.clamp(angle(previousMotionEvent) - angle(event), -MAX_DELTA_ANGLE, MAX_DELTA_ANGLE);
+        boolean result = listener.onRotate(previousMotionEvent, event, deltaAngle);
+        previousMotionEvent.recycle();
+        previousMotionEvent = MotionEvent.obtain(event);
+        return result;
+    }
 }

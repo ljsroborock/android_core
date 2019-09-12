@@ -20,13 +20,13 @@ import org.ros.namespace.GraphName;
 
 /**
  * Interface for layers that are positioned by using Tf.
- * 
+ *
  * @author moesenle@google.com (Lorenz Moesenlechner)
  */
 public interface TfLayer {
 
-  /**
-   * @return the {@link Layer}'s reference frame
-   */
-  GraphName getFrame();
+    /**
+     * @return the {@link Layer}'s reference frame
+     */
+    GraphName getFrame();
 }

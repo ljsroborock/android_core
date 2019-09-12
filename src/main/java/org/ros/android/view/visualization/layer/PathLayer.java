@@ -16,9 +16,8 @@
 
 package org.ros.android.view.visualization.layer;
 
-import org.ros.android.view.visualization.VisualizationView;
 import org.ros.android.view.visualization.Color;
-import geometry_msgs.PoseStamped;
+import org.ros.android.view.visualization.VisualizationView;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
@@ -29,77 +28,79 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import geometry_msgs.PoseStamped;
+
 /**
  * Renders a nav_msgs/Path as a solid line.
- * 
+ *
  * @author moesenle@google.com (Lorenz Moesenlechner)
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class PathLayer extends SubscriberLayer<nav_msgs.Path> implements TfLayer {
 
-  private static final Color COLOR = Color.fromHexAndAlpha("03dfc9", 0.3f);
-  private static final float LINE_WIDTH = 4.0f;
+    private static final Color COLOR = Color.fromHexAndAlpha("03dfc9", 0.3f);
+    private static final float LINE_WIDTH = 4.0f;
 
-  private FloatBuffer vertexBuffer;
-  private int numPoints;
-  private boolean ready;
-  private GraphName frame;
+    private FloatBuffer vertexBuffer;
+    private int numPoints;
+    private boolean ready;
+    private GraphName frame;
 
-  public PathLayer(String topic) {
-    this(GraphName.of(topic));
-  }
-
-  public PathLayer(GraphName topic) {
-    super(topic, "nav_msgs/Path");
-    ready = false;
-    numPoints = 0;
-  }
-
-  @Override
-  public void draw(VisualizationView view, GL10 gl) {
-    if (ready) {
-      gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-      gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-      COLOR.apply(gl);
-      gl.glLineWidth(LINE_WIDTH);
-      gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, numPoints);
-      gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+    public PathLayer(String topic) {
+        this(GraphName.of(topic));
     }
-  }
 
-  @Override
-  public void onStart(VisualizationView view, ConnectedNode connectedNode) {
-    super.onStart(view, connectedNode);
-    getSubscriber().addMessageListener(new MessageListener<nav_msgs.Path>() {
-      @Override
-      public void onNewMessage(nav_msgs.Path path) {
-        updateVertexBuffer(path);
-        ready = true;
-      }
-    });
-  }
-
-  private void updateVertexBuffer(nav_msgs.Path path) {
-    ByteBuffer goalVertexByteBuffer =
-        ByteBuffer.allocateDirect(path.getPoses().size() * 3 * Float.SIZE);
-    goalVertexByteBuffer.order(ByteOrder.nativeOrder());
-    vertexBuffer = goalVertexByteBuffer.asFloatBuffer();
-    int i = 0;
-    if (path.getPoses().size() > 0) {
-      frame = GraphName.of(path.getPoses().get(0).getHeader().getFrameId());
-      for (PoseStamped pose : path.getPoses()) {
-        vertexBuffer.put((float) pose.getPose().getPosition().getX());
-        vertexBuffer.put((float) pose.getPose().getPosition().getY());
-        vertexBuffer.put((float) pose.getPose().getPosition().getZ());
-        i++;
-      }
+    public PathLayer(GraphName topic) {
+        super(topic, "nav_msgs/Path");
+        ready = false;
+        numPoints = 0;
     }
-    vertexBuffer.position(0);
-    numPoints = i;
-  }
 
-  @Override
-  public GraphName getFrame() {
-    return frame;
-  }
+    @Override
+    public void draw(VisualizationView view, GL10 gl) {
+        if (ready) {
+            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+            COLOR.apply(gl);
+            gl.glLineWidth(LINE_WIDTH);
+            gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, numPoints);
+            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+        }
+    }
+
+    @Override
+    public void onStart(VisualizationView view, ConnectedNode connectedNode) {
+        super.onStart(view, connectedNode);
+        getSubscriber().addMessageListener(new MessageListener<nav_msgs.Path>() {
+            @Override
+            public void onNewMessage(nav_msgs.Path path) {
+                updateVertexBuffer(path);
+                ready = true;
+            }
+        });
+    }
+
+    private void updateVertexBuffer(nav_msgs.Path path) {
+        ByteBuffer goalVertexByteBuffer =
+                ByteBuffer.allocateDirect(path.getPoses().size() * 3 * Float.SIZE);
+        goalVertexByteBuffer.order(ByteOrder.nativeOrder());
+        vertexBuffer = goalVertexByteBuffer.asFloatBuffer();
+        int i = 0;
+        if (path.getPoses().size() > 0) {
+            frame = GraphName.of(path.getPoses().get(0).getHeader().getFrameId());
+            for (PoseStamped pose : path.getPoses()) {
+                vertexBuffer.put((float) pose.getPose().getPosition().getX());
+                vertexBuffer.put((float) pose.getPose().getPosition().getY());
+                vertexBuffer.put((float) pose.getPose().getPosition().getZ());
+                i++;
+            }
+        }
+        vertexBuffer.position(0);
+        numPoints = i;
+    }
+
+    @Override
+    public GraphName getFrame() {
+        return frame;
+    }
 }

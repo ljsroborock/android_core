@@ -16,10 +16,11 @@
 
 package org.ros.android.view.visualization.layer;
 
-import com.google.common.base.Preconditions;
-
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+
+import com.google.common.base.Preconditions;
+
 import org.ros.android.view.visualization.VisualizationView;
 import org.ros.android.view.visualization.shape.PixelSpacePoseShape;
 import org.ros.android.view.visualization.shape.Shape;
@@ -37,87 +38,87 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class PosePublisherLayer extends DefaultLayer {
 
-  private Shape shape;
-  private Publisher<geometry_msgs.PoseStamped> posePublisher;
-  private boolean visible;
-  private GraphName topic;
-  private GestureDetector gestureDetector;
-  private Transform pose;
-  private ConnectedNode connectedNode;
+    private Shape shape;
+    private Publisher<geometry_msgs.PoseStamped> posePublisher;
+    private boolean visible;
+    private GraphName topic;
+    private GestureDetector gestureDetector;
+    private Transform pose;
+    private ConnectedNode connectedNode;
 
-  public PosePublisherLayer(String topic) {
-    this(GraphName.of(topic));
-  }
-
-  public PosePublisherLayer(GraphName topic) {
-    this.topic = topic;
-    visible = false;
-  }
-
-  @Override
-  public void draw(VisualizationView view, GL10 gl) {
-    if (visible) {
-      Preconditions.checkNotNull(pose);
-      shape.draw(view, gl);
+    public PosePublisherLayer(String topic) {
+        this(GraphName.of(topic));
     }
-  }
 
-  private double angle(double x1, double y1, double x2, double y2) {
-    double deltaX = x1 - x2;
-    double deltaY = y1 - y2;
-    return Math.atan2(deltaY, deltaX);
-  }
-
-  @Override
-  public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
-    if (visible) {
-      Preconditions.checkNotNull(pose);
-      if (event.getAction() == MotionEvent.ACTION_MOVE) {
-        Vector3 poseVector = pose.apply(Vector3.zero());
-        Vector3 pointerVector =
-            view.getCamera().toCameraFrame((int) event.getX(), (int) event.getY());
-        double angle =
-            angle(pointerVector.getX(), pointerVector.getY(), poseVector.getX(), poseVector.getY());
-        pose = Transform.translation(poseVector).multiply(Transform.zRotation(angle));
-        shape.setTransform(pose);
-        return true;
-      }
-      if (event.getAction() == MotionEvent.ACTION_UP) {
-        posePublisher.publish(pose.toPoseStampedMessage(view.getCamera().getFrame(),
-            connectedNode.getCurrentTime(), posePublisher.newMessage()));
+    public PosePublisherLayer(GraphName topic) {
+        this.topic = topic;
         visible = false;
-        return true;
-      }
     }
-    gestureDetector.onTouchEvent(event);
-    return false;
-  }
 
-  @Override
-  public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
-    this.connectedNode = connectedNode;
-    shape = new PixelSpacePoseShape();
-    posePublisher = connectedNode.newPublisher(topic, geometry_msgs.PoseStamped._TYPE);
-    view.post(new Runnable() {
-      @Override
-      public void run() {
-        gestureDetector =
-            new GestureDetector(view.getContext(), new GestureDetector.SimpleOnGestureListener() {
-              @Override
-              public void onLongPress(MotionEvent e) {
-                pose =
-                    Transform.translation(view.getCamera().toCameraFrame((int) e.getX(),
-                        (int) e.getY()));
+    @Override
+    public void draw(VisualizationView view, GL10 gl) {
+        if (visible) {
+            Preconditions.checkNotNull(pose);
+            shape.draw(view, gl);
+        }
+    }
+
+    private double angle(double x1, double y1, double x2, double y2) {
+        double deltaX = x1 - x2;
+        double deltaY = y1 - y2;
+        return Math.atan2(deltaY, deltaX);
+    }
+
+    @Override
+    public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
+        if (visible) {
+            Preconditions.checkNotNull(pose);
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                Vector3 poseVector = pose.apply(Vector3.zero());
+                Vector3 pointerVector =
+                        view.getCamera().toCameraFrame((int) event.getX(), (int) event.getY());
+                double angle =
+                        angle(pointerVector.getX(), pointerVector.getY(), poseVector.getX(), poseVector.getY());
+                pose = Transform.translation(poseVector).multiply(Transform.zRotation(angle));
                 shape.setTransform(pose);
-                visible = true;
-              }
-            });
-      }
-    });
-  }
+                return true;
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                posePublisher.publish(pose.toPoseStampedMessage(view.getCamera().getFrame(),
+                        connectedNode.getCurrentTime(), posePublisher.newMessage()));
+                visible = false;
+                return true;
+            }
+        }
+        gestureDetector.onTouchEvent(event);
+        return false;
+    }
 
-  @Override
-  public void onShutdown(VisualizationView view, Node node) {
-    posePublisher.shutdown();
-  }
+    @Override
+    public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
+        this.connectedNode = connectedNode;
+        shape = new PixelSpacePoseShape();
+        posePublisher = connectedNode.newPublisher(topic, geometry_msgs.PoseStamped._TYPE);
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                gestureDetector =
+                        new GestureDetector(view.getContext(), new GestureDetector.SimpleOnGestureListener() {
+                            @Override
+                            public void onLongPress(MotionEvent e) {
+                                pose =
+                                        Transform.translation(view.getCamera().toCameraFrame((int) e.getX(),
+                                                (int) e.getY()));
+                                shape.setTransform(pose);
+                                visible = true;
+                            }
+                        });
+            }
+        });
+    }
+
+    @Override
+    public void onShutdown(VisualizationView view, Node node) {
+        posePublisher.shutdown();
+    }
 }

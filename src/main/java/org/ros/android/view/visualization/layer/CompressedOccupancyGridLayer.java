@@ -16,13 +16,14 @@
 
 package org.ros.android.view.visualization.layer;
 
-import com.google.common.base.Preconditions;
-
-import org.ros.android.view.visualization.VisualizationView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.google.common.base.Preconditions;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.ros.android.view.visualization.TextureBitmap;
+import org.ros.android.view.visualization.VisualizationView;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
@@ -35,85 +36,85 @@ import javax.microedition.khronos.opengles.GL10;
  * @author moesenle@google.com (Lorenz Moesenlechner)
  */
 public class CompressedOccupancyGridLayer extends SubscriberLayer<nav_msgs.OccupancyGrid> implements
-    TfLayer {
+        TfLayer {
 
-  /**
-   * Color of occupied cells in the map.
-   */
-  private static final int COLOR_OCCUPIED = 0xdfffffff;
+    /**
+     * Color of occupied cells in the map.
+     */
+    private static final int COLOR_OCCUPIED = 0xdfffffff;
 
-  /**
-   * Color of free cells in the map.
-   */
-  private static final int COLOR_FREE = 0xff8d8d8d;
+    /**
+     * Color of free cells in the map.
+     */
+    private static final int COLOR_FREE = 0xff8d8d8d;
 
-  /**
-   * Color of unknown cells in the map.
-   */
-  private static final int COLOR_UNKNOWN = 0xff000000;
+    /**
+     * Color of unknown cells in the map.
+     */
+    private static final int COLOR_UNKNOWN = 0xff000000;
 
-  private final TextureBitmap textureBitmap;
+    private final TextureBitmap textureBitmap;
 
-  private boolean ready;
-  private GraphName frame;
+    private boolean ready;
+    private GraphName frame;
 
-  public CompressedOccupancyGridLayer(String topic) {
-    this(GraphName.of(topic));
-  }
-
-  public CompressedOccupancyGridLayer(GraphName topic) {
-    super(topic, nav_msgs.OccupancyGrid._TYPE);
-    textureBitmap = new TextureBitmap();
-    ready = false;
-  }
-
-  @Override
-  public void draw(VisualizationView view, GL10 gl) {
-    if (ready) {
-      textureBitmap.draw(view, gl);
+    public CompressedOccupancyGridLayer(String topic) {
+        this(GraphName.of(topic));
     }
-  }
 
-  @Override
-  public GraphName getFrame() {
-    return frame;
-  }
-
-  @Override
-  public void onStart(VisualizationView view, ConnectedNode connectedNode) {
-    super.onStart(view, connectedNode);
-    getSubscriber().addMessageListener(new MessageListener<nav_msgs.OccupancyGrid>() {
-      @Override
-      public void onNewMessage(nav_msgs.OccupancyGrid message) {
-        update(message);
-      }
-    });
-  }
-
-  void update(nav_msgs.OccupancyGrid message) {
-    ChannelBuffer buffer = message.getData();
-    Bitmap bitmap =
-        BitmapFactory.decodeByteArray(buffer.array(), buffer.arrayOffset(), buffer.readableBytes());
-    int stride = bitmap.getWidth();
-    int height = bitmap.getHeight();
-    Preconditions.checkArgument(stride <= 1024);
-    Preconditions.checkArgument(height <= 1024);
-    int[] pixels = new int[stride * height];
-    bitmap.getPixels(pixels, 0, stride, 0, 0, stride, height);
-    for (int i = 0; i < pixels.length; i++) {
-      // Pixels are ARGB packed ints.
-      if (pixels[i] == 0xffffffff) {
-        pixels[i] = COLOR_UNKNOWN;
-      } else if (pixels[i] == 0xff000000) {
-        pixels[i] = COLOR_FREE;
-      } else {
-        pixels[i] = COLOR_OCCUPIED;
-      }
+    public CompressedOccupancyGridLayer(GraphName topic) {
+        super(topic, nav_msgs.OccupancyGrid._TYPE);
+        textureBitmap = new TextureBitmap();
+        ready = false;
     }
-    float resolution = message.getInfo().getResolution();
-    Transform origin = Transform.fromPoseMessage(message.getInfo().getOrigin());
-    textureBitmap.updateFromPixelArray(pixels, stride, resolution, origin, COLOR_UNKNOWN);
-    frame = GraphName.of(message.getHeader().getFrameId());
-    ready = true;
-  }
+
+    @Override
+    public void draw(VisualizationView view, GL10 gl) {
+        if (ready) {
+            textureBitmap.draw(view, gl);
+        }
+    }
+
+    @Override
+    public GraphName getFrame() {
+        return frame;
+    }
+
+    @Override
+    public void onStart(VisualizationView view, ConnectedNode connectedNode) {
+        super.onStart(view, connectedNode);
+        getSubscriber().addMessageListener(new MessageListener<nav_msgs.OccupancyGrid>() {
+            @Override
+            public void onNewMessage(nav_msgs.OccupancyGrid message) {
+                update(message);
+            }
+        });
+    }
+
+    void update(nav_msgs.OccupancyGrid message) {
+        ChannelBuffer buffer = message.getData();
+        Bitmap bitmap =
+                BitmapFactory.decodeByteArray(buffer.array(), buffer.arrayOffset(), buffer.readableBytes());
+        int stride = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Preconditions.checkArgument(stride <= 1024);
+        Preconditions.checkArgument(height <= 1024);
+        int[] pixels = new int[stride * height];
+        bitmap.getPixels(pixels, 0, stride, 0, 0, stride, height);
+        for (int i = 0; i < pixels.length; i++) {
+            // Pixels are ARGB packed ints.
+            if (pixels[i] == 0xffffffff) {
+                pixels[i] = COLOR_UNKNOWN;
+            } else if (pixels[i] == 0xff000000) {
+                pixels[i] = COLOR_FREE;
+            } else {
+                pixels[i] = COLOR_OCCUPIED;
+            }
+        }
+        float resolution = message.getInfo().getResolution();
+        Transform origin = Transform.fromPoseMessage(message.getInfo().getOrigin());
+        textureBitmap.updateFromPixelArray(pixels, stride, resolution, origin, COLOR_UNKNOWN);
+        frame = GraphName.of(message.getHeader().getFrameId());
+        ready = true;
+    }
 }

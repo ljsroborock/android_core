@@ -20,11 +20,11 @@ package org.ros.android.view.visualization.layer;
  * @author damonkohler@google.com (Damon Kohler)
  */
 public interface CameraControlListener {
-  void onTranslate(float distanceX, float distanceY);
+    void onTranslate(float distanceX, float distanceY);
 
-  void onRotate(float focusX, float focusY, double deltaAngle);
+    void onRotate(float focusX, float focusY, double deltaAngle);
 
-  void onZoom(float focusX, float focusY, float factor);
+    void onZoom(float focusX, float focusY, float factor);
 
-  void onDoubleTap(float x, float y);
+    void onDoubleTap(float x, float y);
 }

@@ -35,44 +35,44 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class MetricSpacePolygon extends BaseShape {
 
-  final FloatBuffer vertexBuffer;
-  final List<FloatBuffer> triangles;
+    final FloatBuffer vertexBuffer;
+    final List<FloatBuffer> triangles;
 
-  public MetricSpacePolygon(final float[] vertices, final Color color) {
-    super();
-    vertexBuffer = Vertices.toFloatBuffer(vertices);
-    setColor(color);
+    public MetricSpacePolygon(final float[] vertices, final Color color) {
+        super();
+        vertexBuffer = Vertices.toFloatBuffer(vertices);
+        setColor(color);
 
-    final List<Triangulate.Point> points = Lists.newArrayList();
-    final Triangulate.Point[] contour = new Triangulate.Point[vertices.length / 3];
-    for (int i = 0; i < contour.length; ++i) {
-      contour[i] = new Triangulate.Point(vertices[i * 3], vertices[i * 3 + 1]);
+        final List<Triangulate.Point> points = Lists.newArrayList();
+        final Triangulate.Point[] contour = new Triangulate.Point[vertices.length / 3];
+        for (int i = 0; i < contour.length; ++i) {
+            contour[i] = new Triangulate.Point(vertices[i * 3], vertices[i * 3 + 1]);
+        }
+        Preconditions.checkState(Triangulate.process(contour, points));
+
+        triangles = Lists.newArrayList();
+        for (int i = 0; i < points.size() / 3; ++i) {
+            final FloatBuffer triangle = Vertices.allocateBuffer(3 * 3);
+            for (int j = i * 3; j < i * 3 + 3; ++j) {
+                triangle.put(points.get(j).x());
+                triangle.put(points.get(j).y());
+                triangle.put(0.f);
+            }
+            triangle.flip();
+            triangles.add(triangle);
+        }
     }
-    Preconditions.checkState(Triangulate.process(contour, points));
 
-    triangles = Lists.newArrayList();
-    for (int i = 0; i < points.size() / 3; ++i) {
-      final FloatBuffer triangle = Vertices.allocateBuffer(3 * 3);
-      for (int j = i * 3; j < i * 3 + 3; ++j) {
-        triangle.put(points.get(j).x());
-        triangle.put(points.get(j).y());
-        triangle.put(0.f);
-      }
-      triangle.flip();
-      triangles.add(triangle);
+    @Override
+    public void drawShape(VisualizationView view, GL10 gl) {
+        final Color translucent = getColor();
+        translucent.setAlpha(0.3f);
+        for (final FloatBuffer triangle : triangles) {
+            Vertices.drawTriangleFan(gl, triangle, translucent);
+        }
+        final Color opaque = getColor();
+        opaque.setAlpha(1.f);
+        Vertices.drawLineLoop(gl, vertexBuffer, opaque, 3.f);
+        Vertices.drawPoints(gl, vertexBuffer, opaque, 10.f);
     }
-  }
-
-  @Override
-  public void drawShape(VisualizationView view, GL10 gl) {
-    final Color translucent = getColor();
-    translucent.setAlpha(0.3f);
-    for (final FloatBuffer triangle : triangles) {
-      Vertices.drawTriangleFan(gl, triangle, translucent);
-    }
-    final Color opaque = getColor();
-    opaque.setAlpha(1.f);
-    Vertices.drawLineLoop(gl, vertexBuffer, opaque, 3.f);
-    Vertices.drawPoints(gl, vertexBuffer, opaque, 10.f);
-  }
 }
